@@ -12,7 +12,7 @@ export default defineConfig({
     lastUpdated: true,
 
     themeConfig: {
-        logo: '/assets/image/logo.png',
+        logo: '/logo.png',
         editLink: {
             pattern: 'https://github.com/WebJeffery/Ai-Block-Editor',
             text: '编辑当前页面'
@@ -94,7 +94,7 @@ export default defineConfig({
     },
 
     head: [
-        ['link', {rel: 'icon', href: '/assets/image/logo.png'}],
+        ['link', {rel: 'icon', href: '/logo.png'}],
         // ["script",
         //     {},
         //     `var _hmt = _hmt || [];

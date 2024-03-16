@@ -27,7 +27,7 @@
   ],
   "scripts": {
     "dev": "vite",
-    "docs": "vitepress dev docs --port=8732",
+    "docs": "cross-env APP_BASE_PATH=/Ai-Block-Editor/ vitepress dev docs --port=8732",
     "build:docs": "vitepress build docs",
     "build:github": "cross-env APP_BASE_PATH=/Ai-Block-Editor/ npm run build:docs",
     "build": "vite build",
