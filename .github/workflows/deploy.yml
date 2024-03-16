@@ -42,7 +42,7 @@ jobs:
 
       # 打包成静态文件
       - name: Build
-        run: npm install && npm run build:docs
+        run: npm install && npm run build:github
 
       # 部署到GitHub Pages - 也就是将打包内容发布到GitHub Pages
       - name: Deploy
