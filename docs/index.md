@@ -7,7 +7,7 @@ hero:
   text: "AI Notion 风格<br>块富文本编辑器"
   tagline: 开箱即用、全框架支持、Markdown 友好
   image:
-    src: /assets/image/logo-large.png
+    src: /logo-large.png
     alt: BlockEditor
   actions:
     - theme: brand
