@@ -2,6 +2,9 @@ import {defineConfig} from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
+    outDir: '../dist',
+    base: process.env.APP_BASE_PATH || '/',
+
     lang: 'zh-CN',
     title: "B-Editor",
     description: "支持 AI 的块富文本编辑器",

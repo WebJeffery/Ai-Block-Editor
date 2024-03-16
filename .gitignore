@@ -7,6 +7,7 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+dist
 node_modules
 dist-ssr
 *.local
@@ -15,6 +16,7 @@ ossutil_output
 deps/
 aimp/
 /docs/.vitepress/dist/
+/docs/.vitepress/cache/
 /demos/vanilla-ts/dist/
 
 # Editor directories and files
