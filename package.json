@@ -28,6 +28,7 @@
   "scripts": {
     "dev": "vite",
     "docs": "vitepress dev docs --port=8732",
+    "build:docs": "vitepress build docs",
     "build": "vite build",
     "preview": "vite preview"
   },
