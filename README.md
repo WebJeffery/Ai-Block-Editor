@@ -1,14 +1,14 @@
-<h4 align="right"><strong>English</strong> | <a href="./readme.zh.md">简体中文</a></h4>
+Ai Notion Editor is a block rich text editor for AI.
 
 
-# Ai Notion Editor
+# Ai Block Editor
 
 
-> Ai Notion Editor is a next-generation rich text editor for AI. 
-> It is based on Web Component and therefore supports almost any front-end framework 
-> such as Vue, React, Angular and Svelte. It is adapted to PC Web and mobile, and provides two themes: light and dark. 
-> In addition, it also provides flexible configuration, developers can easily use it to develop any text editing application.
+- Ai Notion Editor is a next-generation rich text editor for AI. 
+- It is based on Web Component and therefore supports almost any front-end framework. such as Vue, React, Angular and Svelte. It is adapted to PC Web and mobile, and provides two themes: light and dark. 
+- In addition, it also provides flexible configuration, developers can easily use it to develop any text editing application.
 
+<h4><strong>English</strong> | <a href="./readme.zh.md">简体中文</a></h4>
 
 ## Completed
 

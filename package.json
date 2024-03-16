@@ -1,7 +1,7 @@
 {
-  "name": "ai-block-ediotr",
+  "name": "ai-block-editor",
   "author": "jeffery",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "type": "module",
   "keywords": [
     "editor",
@@ -27,6 +27,7 @@
   ],
   "scripts": {
     "dev": "vite",
+    "docs": "vitepress dev docs --port=8732",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -75,13 +76,15 @@
     "@types/lodash-es": "^4.17.12",
     "@types/node": "^20.9.0",
     "@types/uuid": "^9.0.8",
+    "ai-block-editor": "^0.1.0",
     "less": "^4.2.0",
     "lowlight": "^3.1.0",
     "rollup-plugin-visualizer": "^5.12.0",
     "tiptap-markdown": "^0.8.9",
     "typescript": "^5.0.2",
     "vite": "^4.4.5",
-    "vite-plugin-dts": "^3.6.3"
+    "vite-plugin-dts": "^3.6.3",
+    "vitepress": "^1.0.0-rc.45"
   },
   "peerDependencies": {
     "@tiptap/core": "^2.2.4",
