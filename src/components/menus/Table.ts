@@ -1,8 +1,8 @@
 import { t } from "i18next";
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import tippy, {Instance} from "tippy.js";
 
-export class Table extends AbstractMenuButton {
+export class Table extends AbstractPopoverButton {
 
     instance?: Instance;
 

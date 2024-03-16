@@ -75,7 +75,7 @@ export const createTextSelectionBubbleMenu = (aiEditor: AiEditor) => {
 }
 
 
-const createLinkBubbleMenu = (aiEditor: AiEditor) => {
+export const createLinkBubbleMenu = (aiEditor: AiEditor) => {
     const menuEl = document.createElement("aie-bubble-link") as AbstractBubbleMenu;
     aiEditor.eventComponents.push(menuEl);
     return createBubbleMenu("linkBubble", {
@@ -133,45 +133,37 @@ export const createImageBubbleMenu = (aiEditor: AiEditor) => {
 }
 
 
-const createTableBubbleMenu = (aiEditor: AiEditor) => {
-    const menuEl = document.createElement("aie-bubble-table") as AbstractBubbleMenu;
-    aiEditor.eventComponents.push(menuEl);
-    return createBubbleMenu("tableBubble", {
-        pluginKey: 'tableBubble',
-        element: menuEl,
-        tippyOptions: {
-            placement: 'top',
-            appendTo: aiEditor.container,
-            arrow: false,
-            getReferenceClientRect: (() => {
-                const selection = aiEditor.innerEditor.state.selection;
-                const {ranges} = selection
-                const from = Math.min(...ranges.map(range => range.$from.pos))
-                const to = Math.max(...ranges.map(range => range.$to.pos))
-                const view = aiEditor.innerEditor.view;
+// const createTableBubbleMenu = (aiEditor: AiEditor) => {
+//     const menuEl = document.createElement("aie-bubble-table") as AbstractBubbleMenu;
+//     aiEditor.eventComponents.push(menuEl);
+//     return createBubbleMenu("tableBubble", {
+//         pluginKey: 'tableBubble',
+//         element: menuEl,
+//         tippyOptions: {
+//             placement: 'top',
+//             appendTo: aiEditor.container,
+//             arrow: false,
+//             getReferenceClientRect: (() => {
+//                 const selection = aiEditor.innerEditor.state.selection;
+//                 const {ranges} = selection
+//                 const from = Math.min(...ranges.map(range => range.$from.pos))
+//                 const to = Math.max(...ranges.map(range => range.$to.pos))
+//                 const view = aiEditor.innerEditor.view;
 
-                const domRect = posToDOMRect(view, from, to);
-                const tablePos = aiEditor.innerEditor.state.selection.$from.posAtIndex(0, 1);
-                const coordsAtPos = aiEditor.innerEditor.view.coordsAtPos(tablePos);
+//                 const domRect = posToDOMRect(view, from, to);
+//                 const tablePos = aiEditor.innerEditor.state.selection.$from.posAtIndex(0, 1);
+//                 const coordsAtPos = aiEditor.innerEditor.view.coordsAtPos(tablePos);
 
-                return {
-                    ...domRect,
-                    top: coordsAtPos.top
-                };
-            })
-        },
-        shouldShow: ({editor}) => {
-            const {state: {selection}} = editor;
-            return editor.isActive("table") && selection.empty
-        }
-    })
-}
+//                 return {
+//                     ...domRect,
+//                     top: coordsAtPos.top
+//                 };
+//             })
+//         },
+//         shouldShow: ({editor}) => {
+//             const {state: {selection}} = editor;
+//             return editor.isActive("table") && selection.empty
+//         }
+//     })
+// }
 
-
-export const getBubbleMenus = (aiEditor: AiEditor): Extensions => {
-    const bubbleMenus: Extensions = [];
-    // bubbleMenus.push(createTextSelectionBubbleMenu(aiEditor))
-    bubbleMenus.push(createLinkBubbleMenu(aiEditor))
-    bubbleMenus.push(createTableBubbleMenu(aiEditor))
-    return bubbleMenus;
-}

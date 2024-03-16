@@ -1,8 +1,8 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import {Editor} from "@tiptap/core";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class OrderedList extends AbstractMenuButton {
+export class OrderedList extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

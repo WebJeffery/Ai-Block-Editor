@@ -1,89 +1,37 @@
-class Boot {
+import { IToolbarConf } from "../types/editor/module"
+
+export class Boot {
     constructor() {
       throw new Error('不能实例化\nCan not construct a instance')
     }
-  
-    // editor 配置
-    static editorConfig: Partial<IEditorConfig> = {}
-    static setEditorConfig(newConfig: Partial<IEditorConfig> = {}) {
-      this.editorConfig = {
-        ...this.editorConfig,
-        ...newConfig,
-      }
-    }
-    static simpleEditorConfig: Partial<IEditorConfig> = {}
-    static setSimpleEditorConfig(newConfig: Partial<IEditorConfig> = {}) {
-      this.simpleEditorConfig = {
-        ...this.simpleEditorConfig,
-        ...newConfig,
-      }
-    }
-  
+
     //toolbar 配置
-    static toolbarConfig: Partial<IToolbarConfig> = {}
-    static setToolbarConfig(newConfig: Partial<IToolbarConfig> = {}) {
-      this.toolbarConfig = {
-        ...this.toolbarConfig,
-        ...newConfig,
-      }
+    static toolbarConfig: Record<string, any> = {}
+    static registerToolbarConfig(toolbar: Record<string, any> = {}) {
+        Object.keys(toolbar).forEach(key => {
+            if (this.toolbarConfig[key]) {
+                Object.assign(this.toolbarConfig[key], toolbar[key])
+            } else {
+                this.toolbarConfig[key] = {
+                    ...toolbar[key]
+                }
+            }
+        })
+        return this.toolbarConfig
     }
-    static simpleToolbarConfig: Partial<IToolbarConfig> = {}
-    static setSimpleToolbarConfig(newConfig: Partial<IToolbarConfig> = {}) {
-      this.simpleToolbarConfig = {
-        ...this.simpleToolbarConfig,
-        ...newConfig,
-      }
+
+    static tiptapExtension: any= []
+    static registerTiptapExtension(extension: Partial<IToolbarConf> = {}) {
+        Array.isArray(extension) ? this.tiptapExtension.push(...extension) : this.tiptapExtension.push(extension)
+        return this.tiptapExtension
     }
-  
-    // 注册插件
-    static plugins: PluginType[] = []
-    static registerPlugin(plugin: PluginType) {
-      this.plugins.push(plugin)
-    }
-  
-    // 注册 menu
-    // TODO 可在注册时传入配置，在开发文档中说明
-    static registerMenu(menuConf: IRegisterMenuConf, customConfig?: { [key: string]: any }) {
-      registerMenu(menuConf, customConfig)
-    }
-  
-    // 注册 renderElem
-    static registerRenderElem(renderElemConf: IRenderElemConf) {
-      registerRenderElemConf(renderElemConf)
-    }
-  
-    // 注册 renderStyle
-    static registerRenderStyle(fn: RenderStyleFnType) {
-      registerStyleHandler(fn)
-    }
-  
-    // 注册 elemToHtml
-    static registerElemToHtml(elemToHtmlConf: IElemToHtmlConf) {
-      registerElemToHtmlConf(elemToHtmlConf)
-    }
-  
-    // 注册 styleToHtml
-    static registerStyleToHtml(fn: styleToHtmlFnType) {
-      registerStyleToHtmlHandler(fn)
-    }
-  
-    // 注册 preParseHtml
-    static registerPreParseHtml(preParseHtmlConf: IPreParseHtmlConf) {
-      registerPreParseHtmlConf(preParseHtmlConf)
-    }
-  
-    // 注册 parseElemHtml
-    static registerParseElemHtml(parseElemHtmlConf: IParseElemHtmlConf) {
-      registerParseElemHtmlConf(parseElemHtmlConf)
-    }
-  
-    // 注册 parseStyleHtml
-    static registerParseStyleHtml(fn: ParseStyleHtmlFnType) {
-      registerParseStyleHtmlHandler(fn)
-    }
-  
-    // 注册 module
-    static registerModule(module: Partial<IModuleConf>) {
-      registerModule(module)
+
+    static registerTiptapBlock(block: Partial<IToolbarConf> = {}) {
+        if (block.blockToolbar) {
+            this.registerToolbarConfig(block.blockToolbar)
+        }
+        if (block.blockExtension) {
+            this.registerTiptapExtension(block.blockExtension)
+        }
     }
   }

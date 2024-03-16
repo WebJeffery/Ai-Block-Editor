@@ -4,7 +4,7 @@ import {t} from "i18next";
 import tippy, {Instance} from "tippy.js";
 import {AiModelManager} from "../../ai/AiModelManager.ts";
 import {AiEditorOptions, InnerEditor} from "../../core/AiEditor.ts";
-import {Svgs} from "../../commons/Svgs.ts";
+import { svgIcons } from "../../icons/svg.ts";
 import {AiClient} from "../../ai/core/AiClient.ts";
 
 
@@ -139,9 +139,9 @@ export class TextSelectionBubbleMenu extends AbstractBubbleMenu {
         container.classList.add("aie-ai-panel")
         container.innerHTML = `
         <div class="aie-ai-panel-body">
-            <div class="aie-ai-panel-body-content" style="display: none"><div class="loader">${Svgs.refresh}</div><textarea readonly></textarea></div>
+            <div class="aie-ai-panel-body-content" style="display: none"><div class="loader">${svgIcons.refresh}</div><textarea readonly></textarea></div>
             <div class="aie-ai-panel-body-input"><input id="prompt" placeholder="告诉 AI 下一步应该如何？比如：帮我翻译成英语" type="text" />
-            <button type="button" id="go" style="width: 30px;height: 30px">${Svgs.aiPanelStart}</button></div>
+            <button type="button" id="go" style="width: 30px;height: 30px">${svgIcons.aiPanelStart}</button></div>
             <div class="aie-ai-panel-body-tips"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9 17C9 17 16 18 19 21H20C20.5523 21 21 20.5523 21 20V13.937C21.8626 13.715 22.5 12.9319 22.5 12C22.5 11.0681 21.8626 10.285 21 10.063V4C21 3.44772 20.5523 3 20 3H19C16 6 9 7 9 7H5C3.89543 7 3 7.89543 3 9V15C3 16.1046 3.89543 17 5 17H6L7 22H9V17ZM11 8.6612C11.6833 8.5146 12.5275 8.31193 13.4393 8.04373C15.1175 7.55014 17.25 6.77262 19 5.57458V18.4254C17.25 17.2274 15.1175 16.4499 13.4393 15.9563C12.5275 15.6881 11.6833 15.4854 11 15.3388V8.6612ZM5 9H9V15H5V9Z" fill="currentColor"></path></svg>
             提示：您可以在上面输入文字或者选择下方的操作</div>
         </div>
@@ -185,6 +185,7 @@ export class TextSelectionBubbleMenu extends AbstractBubbleMenu {
                 const {selection, doc} = this.editor!.state
                 const selectedText = doc.textBetween(selection.from, selection.to);
                 const options = (this.editor as InnerEditor).userOptions;
+                debugger
                 const aiModel = AiModelManager.get(options.ai?.bubblePanelModel || "spark");
                 if (aiModel) {
                     const prompt = (container.querySelector("#prompt") as HTMLInputElement).value
@@ -194,11 +195,11 @@ export class TextSelectionBubbleMenu extends AbstractBubbleMenu {
                             menu.aiClient = aiClient;
                             container.querySelector<HTMLElement>(".loader")!.style.display = "block";
                             container.querySelector<HTMLElement>(".aie-ai-panel-body-content")!.style.display = "block";
-                            container.querySelector("#go")!.innerHTML = Svgs.aiPanelStop;
+                            container.querySelector("#go")!.innerHTML = svgIcons.aiPanelStop;
                         },
                         onStop() {
                             menu.aiClient = null;
-                            container.querySelector("#go")!.innerHTML = Svgs.aiPanelStart;
+                            container.querySelector("#go")!.innerHTML = svgIcons.aiPanelStart;
                             container.querySelector<HTMLElement>(".loader")!.style.display = "none";
                             container.querySelector<HTMLElement>(".aie-ai-panel-footer")!.style.display = "block";
                         },

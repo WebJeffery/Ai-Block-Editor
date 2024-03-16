@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Painter extends AbstractMenuButton {
+export class Painter extends AbstractPopoverButton {
 
     constructor() {
         super();
@@ -15,9 +15,21 @@ export class Painter extends AbstractMenuButton {
     }
 
     // @ts-ignore
+    onCreate(props, options): void {
+        this.classList.add("aie-disable");
+        this.editor = props.editor;
+        this.options = options;
+    }
+
+    // @ts-ignore
     onClick(commands) {
         commands.setPainter(this.editor?.state.selection.$head.marks())
         // console.log( htmlElement.style.cursor)
+    }
+
+    // @ts-ignore
+    onDisable(editor) {
+        return !this.editor?.state.selection.$head.marks().length
     }
 
 }

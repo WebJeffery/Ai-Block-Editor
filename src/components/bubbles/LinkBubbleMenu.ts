@@ -31,22 +31,21 @@ export class LinkBubbleMenu extends AbstractBubbleMenu {
 
         const popover = new Popover();
         popover.setContent(`
-            <div style="width: 250px">${t("link-address")} </div>
-             <div style="width: 250px">
-             <input type="text" id="href" style="width: 250px">
+            <div>${t("link-address")} </div>
+             <div>
+             <input type="text" id="href" style="width: 250px" autocomplete="off">
             </div>
-            
-            <div style="margin-top: 10px">${t("link-open-type")}</div>
-            <div>
-            <select id="target" style="width: 250px">
-                <option value="">${t("default")}</option>
-                <option value="_blank">${t("link-open-blank")}</option>
-            </select>
-            </div>
-        `);
+            `);
+            // <div style="margin-top: 10px">${t("link-open-type")}</div>
+            // <div>
+            // <select id="target" style="width: 250px">
+            //     <option value="">${t("default")}</option>
+            //     <option value="_blank">${t("link-open-blank")}</option>
+            // </select>
+            // </div>
 
         popover.onConfirmClick((instance) => {
-            const href = (instance.popper.querySelector("#href") as HTMLInputElement).value;
+            let href = (instance.popper.querySelector("#href") as HTMLInputElement).value;
             if (href.trim() === "") {
                 this.editor?.chain().focus().extendMarkRange('link')
                     .unsetLink()
@@ -54,15 +53,19 @@ export class LinkBubbleMenu extends AbstractBubbleMenu {
                 return;
             }
 
-            let target: string | null = (instance.popper.querySelector("#target") as HTMLInputElement).value;
-            if (target.trim() === "") {
-                target = null;
+            // let target: string | null = (instance.popper.querySelector("#target") as HTMLInputElement).value;
+            // if (target.trim() === "") {
+            //     target = null;
+            // }
+
+            if (!href.startsWith('http')) {
+                href = 'https://' + href
             }
 
             this.editor?.chain().focus().extendMarkRange("link")
                 .setLink({
                     href,
-                    target,
+                    target: "_blank",
                     rel: null,
                 }).run()
         });
@@ -73,9 +76,9 @@ export class LinkBubbleMenu extends AbstractBubbleMenu {
             if (attrs && attrs.href) {
                 (instance.popper.querySelector("#href") as HTMLInputElement).value = attrs.href;
             }
-            if (attrs && attrs.target) {
-                (instance.popper.querySelector("#target") as HTMLInputElement).value = attrs.target;
-            }
+            // if (attrs && attrs.target) {
+            //     (instance.popper.querySelector("#target") as HTMLInputElement).value = attrs.target;
+            // }
         })
 
         popover.setTrigger(this.querySelector("#edit")!, "right");

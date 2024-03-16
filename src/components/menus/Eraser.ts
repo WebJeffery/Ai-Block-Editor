@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Eraser extends AbstractMenuButton {
+export class Eraser extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

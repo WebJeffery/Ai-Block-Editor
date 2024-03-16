@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class IndentIncrease extends AbstractMenuButton {
+export class IndentIncrease extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

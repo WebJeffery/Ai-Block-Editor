@@ -1,8 +1,8 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import {Editor} from "@tiptap/core";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Quote extends AbstractMenuButton {
+export class Quote extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `
@@ -21,6 +21,10 @@ export class Quote extends AbstractMenuButton {
 
     onActive(editor: Editor): boolean {
         return editor.isActive("blockquote")
+    }
+
+    onDisable(editor: Editor) {
+        return !this.editor?.can().setBlockquote?.()
     }
 }
 

@@ -1,88 +1,11 @@
 import {AiEditorOptions, AiEditorEvent, CustomMenu, InnerEditor} from "../core/AiEditor.ts";
 import {EditorEvents} from "@tiptap/core";
-import {Undo} from "./menus/Undo";
-import {AbstractMenuButton} from "./AbstractMenuButton.ts";
-import {Redo} from "./menus/Redo";
-import {Heading} from "./menus/Heading.ts";
-import {FontFamily} from "./menus/FontFamily";
-import {FontSize} from "./menus/FontSize";
-import {Bold} from "./menus/Bold";
-import {Italic} from "./menus/Italic";
-import {Underline} from "./menus/Underline";
-import {Strike} from "./menus/Strike";
-import {Subscript} from "./menus/Subscript";
-import {Superscript} from "./menus/Superscript";
-import {Highlight} from "./menus/Highlight";
-import {FontColor} from "./menus/FontColor";
-import {Divider} from "./menus/Divider";
-import {BulletList} from "./menus/BulletList";
-import {OrderedList} from "./menus/OrderedList";
-import {IndentDecrease} from "./menus/IndentDecrease";
-import {IndentIncrease} from "./menus/IndentIncrease";
-import {Align} from "./menus/Align";
-import {Link} from "./menus/Link";
-import {Todo} from "./menus/Todo";
-import {LineHeight} from "./menus/LineHeight";
-import {Quote} from "./menus/Quote";
-import {Image} from "./menus/Image";
-import {Video} from "./menus/Video";
-import {Code} from "./menus/Code";
-import {CodeBlock} from "./menus/CodeBlock";
-import {Eraser} from "./menus/Eraser";
-import {Hr} from "./menus/Hr";
-import {Table} from "./menus/Table";
-import {Break} from "./menus/Break";
-import {Attachment} from "./menus/Attachment";
-import {Fullscreen} from "./menus/Fullscreen";
-import {Printer} from "./menus/Printer";
-import {Emoji} from "./menus/Emoji";
-import {Painter} from "./menus/Painter";
-import {Ai} from "./menus/Ai.ts";
+import { AbstractPopoverButton } from "./AbstractPopoverButton.ts";
 import tippy from "tippy.js";
 import {t} from "i18next";
-import {Container} from "./menus/Container.ts";
-import {Custom} from "./menus/Custom.ts";
-import {defineCustomElement} from "../commons/defineCustomElement.ts";
+import { elementUuid } from "../util/uuid.ts"
+import { createElement } from "../util/dom.ts";
 
-defineCustomElement('aie-undo', Undo);
-defineCustomElement('aie-redo', Redo);
-defineCustomElement('aie-brush', Painter);
-defineCustomElement('aie-container', Container);
-defineCustomElement('aie-custom', Custom);
-defineCustomElement('aie-eraser', Eraser);
-defineCustomElement('aie-heading', Heading);
-defineCustomElement('aie-font-family', FontFamily);
-defineCustomElement('aie-font-size', FontSize);
-defineCustomElement('aie-bold', Bold);
-defineCustomElement('aie-italic', Italic);
-defineCustomElement('aie-underline', Underline);
-defineCustomElement('aie-strike', Strike);
-defineCustomElement('aie-link', Link);
-defineCustomElement('aie-code', Code);
-defineCustomElement('aie-subscript', Subscript);
-defineCustomElement('aie-superscript', Superscript);
-defineCustomElement('aie-highlight', Highlight);
-defineCustomElement('aie-font-color', FontColor);
-defineCustomElement('aie-divider', Divider);
-defineCustomElement('aie-bullet-list', BulletList);
-defineCustomElement('aie-ordered-list', OrderedList);
-defineCustomElement('aie-indent-decrease', IndentDecrease);
-defineCustomElement('aie-indent-increase', IndentIncrease);
-defineCustomElement('aie-align', Align);
-defineCustomElement('aie-todo', Todo);
-defineCustomElement('aie-line-height', LineHeight);
-defineCustomElement('aie-break', Break);
-defineCustomElement('aie-quote', Quote);
-defineCustomElement('aie-image', Image);
-defineCustomElement('aie-video', Video);
-defineCustomElement('aie-code-block', CodeBlock);
-defineCustomElement('aie-hr', Hr);
-defineCustomElement('aie-table', Table);
-defineCustomElement('aie-attachment', Attachment);
-defineCustomElement('aie-fullscreen', Fullscreen);
-defineCustomElement('aie-printer', Printer);
-defineCustomElement('aie-emoji', Emoji);
-defineCustomElement('aie-ai', Ai);
 
 export type MenuButtonOptions = {
     key: string,
@@ -90,55 +13,79 @@ export type MenuButtonOptions = {
     svg: string,
 }
 
-const defaultMenus = ["undo", "redo", "brush", "eraser", "divider", "heading", "font-family", "font-size", "divider", "bold", "italic", "underline"
-    , "strike", "link", "code", "subscript", "superscript", "hr", "todo", "emoji", "divider", "highlight", "font-color", "divider"
-    , "align", "line-height", "divider", "bullet-list", "ordered-list", "quote",
-    "indent-decrease", "indent-increase", 
-    "break", "divider", "image", "video", "attachment", "container",
-    "code-block", "table", "divider", "fullscreen", 
+const defaultMenus = ["undo", "redo", "brush", "eraser", "divider", "heading", "font-family", "font-size", "divider", "bold", "italic", 
+    "underline", "strike", "link", "code", "subscript", "superscript", "hr", "todo", "emoji", "divider", "highlight", "font-color", "divider"
+    , "align", "line-height", "divider", "bullet-list", "ordered-list", "quote", "indent-decrease", "indent-increase", "break", "divider", 
+    "image", "video", "attachment", "container", "code-block", "table", "divider", "fullscreen", 
     // "printer", "ai"
 ];
+
+type toobarItem = {
+    id: string,
+    key: string,
+    text: string,
+    tips: string
+    icon?: string,
+    execute?: any
+}
+
+const formatToolbar = (toolbar: (string | toobarItem)[]) => {
+    return toolbar.map(value => {
+        if (typeof value === 'string') {
+            return {
+                id: elementUuid(),
+                key: value,
+            }
+        } else {
+            return {
+                ...value,
+                id: value.id || elementUuid(),
+                key: value.key || 'custom'
+            }
+        }
+    })
+
+}
 
 
 export class Header extends HTMLElement implements AiEditorEvent {
     // template:string;
-    menuButtons: AbstractMenuButton[] = [];
+    menuButtons: AbstractPopoverButton[] = [];
 
     constructor() {
         super();
     }
 
     onCreate(event: EditorEvents["create"], options: AiEditorOptions): void {
-        let toolbarKeys = options.toolbarKeys || defaultMenus;
+        let toolbarKeys = (options.toolbarKeys || defaultMenus) as string [];
+        let toolbarList = formatToolbar(toolbarKeys)
 
-        for (let toolbarKey of toolbarKeys) {
+        if (event.editor.options?.onFormatToolbar) {
+            toolbarList = event.editor.options?.onFormatToolbar(toolbarList)
+        }
+
+        for (let toolbar of toolbarList) {
+            let toolbarKey = toolbar.key
             if (!toolbarKey) continue;
 
             try {
-                if (typeof toolbarKey === "string") {
+                if (toolbarKey !== "custom") {
                     toolbarKey = toolbarKey.trim();
                     if (toolbarKey === "|") {
                         toolbarKey = "divider"
                     }
-                    const menuButton = document.createElement("aie-" + toolbarKey) as AbstractMenuButton;
-                    menuButton.classList.add("aie-menu-item")
+                    const menuButton = createElement("aie-" + toolbarKey, { className: 'aie-menu-item', id: toolbar.id }) as AbstractPopoverButton;
                     menuButton.onCreate(event, options);
 
                     if (toolbarKey !== "divider") {
+                        // 提示文本
                         const tip = t(toolbarKey) as string;
-                        tip && tippy(menuButton, {
-                            appendTo: () => event.editor.view.dom.closest(".aie-container")!,
-                            content: tip,
-                            theme: 'aietip',
-                            arrow: true,
-                            // trigger:"click",
-                            // interactive:true,
-                        });
+                        tip && menuButton.onPopover?.(tip)
                     }
                     this.menuButtons.push(menuButton);
                 } else {
                     const customMenuConfig = toolbarKey as CustomMenu;
-                    const menuButton = document.createElement("aie-custom") as Custom;
+                    const menuButton = document.createElement("aie-custom") as AbstractPopoverButton;
                     menuButton.classList.add("aie-menu-item")
                     if (customMenuConfig.id) {
                         menuButton.setAttribute("id", customMenuConfig.id);
@@ -151,14 +98,7 @@ export class Header extends HTMLElement implements AiEditorEvent {
 
                     if (customMenuConfig.tip) {
                         const tip = t(customMenuConfig.tip) as string;
-                        tip && tippy(menuButton, {
-                            appendTo: () => event.editor.view.dom.closest(".aie-container")!,
-                            content: tip,
-                            theme: 'aietip',
-                            arrow: true,
-                            // trigger:"click",
-                            // interactive:true,
-                        });
+                        tip && menuButton.onPopover(tip)
                     }
 
                     if (customMenuConfig.onCreate) {

@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import {Editor} from "@tiptap/core";
 
-export class CodeBlock extends AbstractMenuButton {
+export class CodeBlock extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

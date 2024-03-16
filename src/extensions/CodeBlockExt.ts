@@ -389,9 +389,9 @@ export const CodeBlockExt = CodeBlockLowlight.extend<MyCodeBlockLowlightOptions>
 
 
             container.innerHTML = `
-                <div class="aie-codeblock-tools" contenteditable="false">
+            <div class="aie-codeblock-tools" contenteditable="false">
                     ${this.options.codeCommentsAi ? '<div class="aie-codeblock-tools-comments">自动注释</div>' : ''}
-                    ${this.options.codeExplainAi ? '<div class="aie-codeblock-tools-explain">代码解释</div>' : ''}
+                    ${this.options.codeExplainAi ? '<div class="aie-codeblock-tools-explain">代码语言</div>' : ''}
                     <div class="aie-codeblock-tools-lang" contenteditable="false"><span>${language || this.options.defaultLanguage}</span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 16L6 10H18L12 16Z"></path></svg></div>
                 </div>
                 <pre class="hljs"><code></code></pre>

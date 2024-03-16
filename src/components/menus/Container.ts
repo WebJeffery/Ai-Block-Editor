@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import {Editor} from "@tiptap/core";
 
-export class Container extends AbstractMenuButton {
+export class Container extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

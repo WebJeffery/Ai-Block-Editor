@@ -1,4 +1,4 @@
-import {AiEditorOptions, AiEditorEvent} from "../core/AiEditor.ts";
+import {AiEditorOptions, AiEditorEvent, CustomMenu} from "../core/AiEditor.ts";
 import {Editor, EditorEvents} from "@tiptap/core";
 // @ts-ignore
 import {ChainedCommands} from "@tiptap/core/dist/packages/core/src/types";
@@ -39,16 +39,33 @@ export class AbstractMenuButton extends HTMLElement implements AiEditorEvent {
     onTransaction(event: EditorEvents["transaction"]): void {
         const htmlDivElement = this.querySelector("div");
         if (!htmlDivElement) return;
+
         if (this.onActive(event.editor)) {
             htmlDivElement.classList.add("active")
         } else {
             htmlDivElement.classList.remove("active")
+        }
+
+        if (this.onDisable(event.editor)) {
+            this.classList.add("aie-disable")
+        } else {
+            this.classList.remove("aie-disable")
         }
     }
 
     // @ts-ignore
     onActive(editor: Editor): boolean {
         return false
+    }
+
+    // @ts-ignore
+    onDisable(editor: Editor): boolean {
+        return false
+    }
+
+    // @ts-ignore
+    onConfig(config: CustomMenu) {
+        //do nothing
     }
 }
 

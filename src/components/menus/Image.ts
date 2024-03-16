@@ -1,8 +1,8 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import {InnerEditor} from "../../core/AiEditor.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Image extends AbstractMenuButton {
+export class Image extends AbstractPopoverButton {
 
     fileInput?: HTMLInputElement;
 

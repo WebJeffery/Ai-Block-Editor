@@ -1,6 +1,6 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 
-export class Printer extends AbstractMenuButton {
+export class Printer extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

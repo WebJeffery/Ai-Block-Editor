@@ -1,7 +1,7 @@
-import { AbstractMenuButton } from "../AbstractMenuButton.ts";
+import { AbstractPopoverButton } from "../AbstractPopoverButton.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Fullscreen extends AbstractMenuButton {
+export class Fullscreen extends AbstractPopoverButton {
   fullscreenSvg = svgIcons.fullscreenSvg;
   fullscreenExitSvg = svgIcons.fullscreenExitSvg;
   isFullscreen: boolean = false;
@@ -40,5 +40,10 @@ export class Fullscreen extends AbstractMenuButton {
     this.querySelector("div")!.innerHTML = this.isFullscreen
       ? this.fullscreenExitSvg
       : this.fullscreenSvg;
+  }
+
+  // @ts-ignore
+  onFormatTip(key: string, i18n) {
+    return i18n(this.isFullscreen ? "fullscreen": "cancel-fullscreen")
   }
 }

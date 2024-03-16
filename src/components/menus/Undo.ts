@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Undo extends AbstractMenuButton {
+export class Undo extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `
@@ -14,8 +14,20 @@ export class Undo extends AbstractMenuButton {
     }
 
     // @ts-ignore
+    onCreate(props, options): void {
+        this.classList.add("aie-disable");
+        this.editor = props.editor;
+        this.options = options;
+    }
+
+    // @ts-ignore
     onClick(commands) {
         commands.undo();
+    }
+
+    // @ts-ignore
+    onDisable(editor) {
+        return editor.aiEditor.canUndo
     }
 
 }

@@ -1,4 +1,4 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import tippy from "tippy.js";
 
 
@@ -8,7 +8,7 @@ const emojis = ['😀','😃','😄','😁','😆','😅','🤣','😂','🙂','
     ,'🥺','😦','😧','😨','😰','😥','😢','😭','😱','😖','😣','😞','😓','😩','😫','🥱','😤','😡','😠','🤬','😈','👿','💀','☠️','💩','🤡','👹','👺'
     ,'👻','👽','👾','🤖','😺','😸','😹','😻','😼','😽','🙀','😿','😾','🙈','🙉','🙊','💌','💘','💝','💖','💗','💓','💞','💕','💟','❣️','💔'
     ,'💋','💯','💢','💥','💫','💦','💨','💤'];
-export class Emoji extends AbstractMenuButton {
+export class Emoji extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `

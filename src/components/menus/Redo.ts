@@ -1,11 +1,11 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import { svgIcons } from "../../icons/svg.ts"
 
-export class Redo extends AbstractMenuButton {
+export class Redo extends AbstractPopoverButton {
     constructor() {
         super();
         const template = `
-         <div style="height: 16px">
+         <div style="height: 16px" >
             ${svgIcons.redo}
          </div>
         `;
@@ -14,8 +14,20 @@ export class Redo extends AbstractMenuButton {
     }
 
     // @ts-ignore
+    onCreate(props, options): void {
+        this.classList.add("aie-disable");
+        this.editor = props.editor;
+        this.options = options;
+    }
+
+    // @ts-ignore
     onClick(commands) {
         commands.redo();
+    }
+
+    // @ts-ignore
+    onDisable(editor) {
+        return editor.aiEditor.canRedo
     }
 }
 

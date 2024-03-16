@@ -1,6 +1,4 @@
 import {Editor as Tiptap, EditorEvents, EditorOptions, Extensions, getTextBetween} from "@tiptap/core";
-import { merge } from "lodash-es"
-
 import {Header} from "../components/Header.ts";
 import {Footer} from "../components/Footer.ts";
 
@@ -8,7 +6,8 @@ import {getExtensions} from "./getExtensions.ts";
 
 import "../styles"
 import i18next from "i18next";
-import {zh} from "../i18n/zh.ts";
+import {zhCN} from "../i18n/zh-CN.ts";
+import { zhTW } from "../i18n/zh-TW.ts";
 import {en} from "../i18n/en.ts";
 import {Resource} from "i18next";
 
@@ -16,7 +15,7 @@ import {DOMParser} from "@tiptap/pm/model";
 import {AiGlobalConfig} from "../ai/AiGlobalConfig.ts";
 import {AiModelManager} from "../ai/AiModelManager.ts";
 import {defineCustomElement} from "../commons/defineCustomElement.ts";
-import { isElement } from "../util/dom.ts"
+import { createElement, isElement } from "../util/dom.ts"
 
 
 defineCustomElement('aie-header', Header);
@@ -51,8 +50,10 @@ export interface CustomMenu {
 
 
 export type AiEditorOptions = {
-    element: string | Element,
+    mode?: string, // 模式 single, all
+    element?: string | Element,
     content?: string,
+    className?: string,
     contentRetention?: boolean,
     contentRetentionKey?: string,
     header: Element | boolean,
@@ -64,6 +65,8 @@ export type AiEditorOptions = {
     theme?: "light" | "dark",
     cbName?: string,
     cbUrl?: string
+    tiptapOptions?: Record<string, any>,
+    extensionOptions?: Record<string, any>, // 扩展选项
     onMentionQuery?: (query: string) => any[] | Promise<any[]>,
     onCreateBefore?: (editor: AiEditor, extensions: Extensions) => void | Extensions,
     onDestroy?: (editor: AiEditor) => void,
@@ -114,8 +117,9 @@ export type AiEditorOptions = {
 }
 
 const defaultOptions: Partial<AiEditorOptions> = {
+    mode: 'all',
     theme: "light",
-    lang: "zh",
+    lang: "zhCN",
     contentRetentionKey: "ai-editor-content",
     editable: true,
     placeholder: "",
@@ -157,6 +161,8 @@ export class AiEditor {
 
     innerEditor!: InnerEditor;
 
+    rootElement!: Element;
+
     container!: HTMLDivElement;
 
     header!: Header;
@@ -170,7 +176,21 @@ export class AiEditor {
     eventComponents: AiEditorEvent[] = [];
 
     constructor(_: AiEditorOptions) {
-        this.options = merge({}, defaultOptions, _);
+        this.options = {
+            ...defaultOptions,
+            ..._
+        };
+        const element = _.element
+
+        const rootEl  = element 
+            ? typeof element === "string" 
+                ? document.querySelector(element) as Element 
+                : element
+            : createElement('div', { className: 'aie-container-outer'})
+        if (!rootEl) {
+            throw new Error('找不到挂载容器')
+        }
+        this.rootElement = rootEl
         this.initI18nAndInnerEditor();
     }
 
@@ -178,12 +198,13 @@ export class AiEditor {
         const i18nConfig = this.options.i18n || {};
         const resources = {
             en: {translation: {...en, ...i18nConfig.en}},
-            zh: {translation: {...zh, ...i18nConfig.zh}},
+            zhCN: {translation: {...zhCN, ...i18nConfig.zhCN}},
+            zhTW: {translation: {...zhTW, ...i18nConfig.zhTW}},
         } as Resource;
 
         //fill the resources but en and zh
         for (let key of Object.keys(i18nConfig)) {
-            if (key != "en" && key != "zh") {
+            if (key != "en" && key != "zhCN" && key != "zhTW") {
                 resources[key] = {
                     translation: {...i18nConfig[key]}
                 }
@@ -197,14 +218,18 @@ export class AiEditor {
     }
 
     private initInnerEditor() {
-        const { header, footer, element } = this.options
-        const rootEl = typeof element === "string" ? document.querySelector(element) as Element : element;
+        const {
+            header,
+            footer,
+            className,
+            tiptapOptions = {}
+        } = this.options
 
-        //set the editor theme class
-        rootEl.classList.add(`aie-theme-${this.options.theme}`);
-
-
-        this.container = rootEl.querySelector(".aie-container")!;
+        if (this.container?.childNodes?.length) {
+            this.destroy()
+        }
+        
+        this.container = this.rootElement?.querySelector(".aie-container")!;
         if (!this.container) {
             this.container = document.createElement("div");
             this.container.classList.add("aie-container");
@@ -212,7 +237,8 @@ export class AiEditor {
             this.customLayout = true;
         }
 
-        rootEl.appendChild(this.container);
+        //set the editor class
+        className && this.rootElement.classList.add(className);
 
         this.mainEl = document.createElement("div");
         this.mainEl.style.flexGrow = "1";
@@ -236,15 +262,21 @@ export class AiEditor {
             }
         }
 
-        let defaultExtensions = getExtensions(this, this.options);
+        let extensions = getExtensions(this, this.options);
 
-        let extensions = [...defaultExtensions]
+        // if (mode === 'all') {
+        //     extensions = getExtensions(this, this.options);
+        // }
+        if (tiptapOptions?.extensions) {
+            extensions.push(...tiptapOptions.extensions)
+        }
         if (this.options.onCreateBefore) {
             const newExtensions = this.options.onCreateBefore(this, extensions);
             if (!newExtensions) extensions = newExtensions!;
         }
 
         this.innerEditor = new InnerEditor(this, this.options, {
+            ...tiptapOptions,
             element: this.mainEl,
             content: content,
             editable: this.options.editable,
@@ -258,11 +290,12 @@ export class AiEditor {
                 },
             }
         })
+        // 挂载DOM内容
+        this.rootElement.appendChild(this.container);
+
     }
 
     private onCreate(props: EditorEvents['create']) {
-        this.innerEditor.view.dom.style.height = "calc(100% - 20px)"
-
         this.eventComponents.forEach((zEvent) => {
             zEvent.onCreate && zEvent.onCreate(props, this.options);
         });
@@ -410,6 +443,20 @@ export class AiEditor {
         this.innerEditor.commands.insertContent(content);
         return this;
     }
+    // 替换文本
+    replaceText(text: string) {
+        const {state: {selection, tr}, view: {dispatch}, schema} = this.innerEditor
+        if (selection.empty || !text) return "";
+        const textNode = schema.text(text);
+        dispatch(tr.replaceRangeWith(selection.from, selection.to, textNode))
+    }
+    // 插入文本
+    insertText(text: string) {
+        const {state: {selection, tr}, view: {dispatch}} = this.innerEditor
+        if (!text) return "";
+
+        dispatch(tr.insertText(text, selection.to))
+    }
 
     setEditable(editable: boolean) {
         this.innerEditor.setEditable(editable, true);
@@ -460,5 +507,19 @@ export class AiEditor {
 
     isDestroyed() {
         return this.innerEditor.isDestroyed;
+    }
+    // 挂载元素
+    get element() {
+        return this.rootElement
+    }
+
+    get canUndo() {
+        // @ts-ignore
+        return !this.innerEditor.can()?.undo()
+    }
+
+    get canRedo() {
+        // @ts-ignore
+        return !this.innerEditor.can()?.redo()
     }
 }

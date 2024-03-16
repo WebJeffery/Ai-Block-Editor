@@ -1,7 +1,7 @@
-import {AbstractMenuButton} from "../AbstractMenuButton.ts";
+import {AbstractPopoverButton} from "../AbstractPopoverButton.ts";
 import {InnerEditor} from "../../core/AiEditor.ts";
 
-export class Attachment extends AbstractMenuButton {
+export class Attachment extends AbstractPopoverButton {
 
     fileInput?: HTMLInputElement;
 

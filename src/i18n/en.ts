@@ -3,22 +3,23 @@ export const en =  {
     "default":"Default",
     "delete": "Delete",
     "confirm": "Confirm",
+    "placeholder": "Place '/' for commands...",
 
     //menu tips
     "undo": "Undo",
     "redo": "Redo",
-    "brush": "Format Painter",
-    "container": "Highlight container",
-    "eraser": "clear format",
-    "heading": "Paragraph/Heading",
+    "brush": "Format Match",
+    "eraser": "Remove Format",
+    "container": "Highlight Container",
+    "heading": "Text/Heading",
     "font-family": "Font Family",
     "font-size": "Font Size",
     "bold": "Bold",
-    "italic": "Italics",
+    "italic": "Italic",
     "underline": "Underline",
     "strike": "Strikethrough",
     "link": "Link",
-    "code": "Inline code",
+    "code": "Insert Code",
     "subscript": "Subscript",
     "superscript": "Superscript",
     "hr": "Dividing line",
@@ -26,31 +27,64 @@ export const en =  {
     "emoji": "Emoji expression",
     "highlight": "Highlight",
     "font-color": "Font color",
-    "align": "Alignment",
-    "line-height": "Line height",
-    "bullet-list": "Unordered list",
-    "ordered-list": "Ordered list",
-    "indent-decrease": "Decrease indent",
-    "indent-increase": "Increase indent",
+    "align": "Justify",
+    "line-height": "LineHeight",
+    "bullet-list": "Bulleted List",
+    "ordered-list": "Numbered List",
+    "indent-decrease": "Decrease Indent",
+    "indent-increase": "Increase Indent",
     "break": "Force line break",
     "image": "Image",
     "video": "video",
     "attachment": "Attachment",
-    "quote": "Quote",
+    "quote": "Quoteto",
     "code-block": "Code block",
     "table": "Table",
     "printer": "Print",
-    "fullscreen": "Full screen",
+    "fullscreen": "Full Screen",
+    "cancel-fullscreen": "Cancel Full Screen",
     "ai": "AI",
 
+    // slash
+    "heading-group": "Heading",
+    "basic-group": "Basic",
+    "bulletList-desc": "Create a simple bulleted list.",
+    "orderedList-desc": "Create a list with numbering.",
+    "quote-desc": "Capture a quote.",
+
+
     /////
-    "paragraph":"Paragraph",
-    "h1":"H1",
-    "h2":"H2",
-    "h3":"H3",
-    "h4":"H4",
-    "h5":"H5",
-    "h6":"H6",
+    "paragraph":"Text",
+    "paragraph-desc":"Just start writing with plain text.",
+    "h1":"Heading 1",
+    "h1-desc":"Big section heading. Suggest only 1 Heading 1 per article.",
+    "h2":"Heading 2",
+    "h2-desc":"Subtitle of the article",
+    "h3":"Heading 3",
+    "h3-desc":"Subtitle of the article",
+    "h4":"Heading 4",
+    "h4-desc":"Subtitle of the article",
+    "h5":"Heading 5",
+    "h5-desc":"Paragraph title",
+    "h6":"Heading 6",
+    "h6-desc":"Paragraph title",
+
+    ////alignment
+    "align-left":"JustifyLeft",
+    "align-right":"JustifyRight",
+    "align-center":"JustifyCenter",
+
+    ///link
+    "edit-link":"Edit link",
+    "unlink":"Unlink",
+    "visit-link":"View Link",
+    "link-address":"Link address",
+    "link-open-type":"Open type",
+    "link-open-blank":"Blank",
+
+    ////font
+    "default-font-size":"Size",
+    "default-font-family":"Default font",
 
     ////colors panel
     "standardColors":"Standard colors",
@@ -60,12 +94,6 @@ export const en =  {
     "insertTable":"Insert Table",
     "row":"Row",
     "column":"Column",
-
-    ////alignment
-    "align-left":"Align left",
-    "align-right":"Align right",
-    "align-center":"Align center",
-    "align-justify":"Align justify",
 
     ////table
     "insert-column-left":"Insert column left",
@@ -79,18 +107,6 @@ export const en =  {
     "split-cells-horizontal":"Split cells",
     "split-cells-vertical":"Split cells",
     "delete-table":"Delete table",
-
-    ///link
-    "edit-link":"Edit link",
-    "unlink":"Unlink",
-    "visit-link":"Visit link",
-    "link-address":"Link address",
-    "link-open-type":"Open type",
-    "link-open-blank":"Blank",
-
-    ////font
-    "default-font-size":"Size",
-    "default-font-family":"Default font",
 
     // footer
     "char-count": "Characters"

@@ -1,9 +1,9 @@
-import {AbstractMenuButton} from "./AbstractMenuButton.ts";
 import tippy, {Instance} from "tippy.js";
 import {Editor, EditorEvents} from "@tiptap/core";
 import { svgIcons } from "../icons/svg.ts"
+import { AbstractPopoverButton } from "./AbstractPopoverButton.ts";
 
-export abstract class AbstractDropdownMenuButton<T> extends AbstractMenuButton {
+export abstract class AbstractDropdownMenuButton<T> extends AbstractPopoverButton {
     tippyInstance?: Instance;
     tippyEl?: HTMLDivElement;
     textEl?: HTMLDivElement;
@@ -18,7 +18,7 @@ export abstract class AbstractDropdownMenuButton<T> extends AbstractMenuButton {
 
     renderTemplate() {
         this.template = `
-         <div style="width: ${this.width};">
+         <div style="min-width: ${this.width};">
          <div style="display: flex" id="tippy">
              <span style="line-height: 18px;font-size: 14px;text-align:center;overflow: hidden; width: ${this.menuTextWidth}" id="text">
                 ${this.onMenuTextRender(this.defaultMenuIndex)}
@@ -49,7 +49,7 @@ export abstract class AbstractDropdownMenuButton<T> extends AbstractMenuButton {
     createMenuElement() {
         const div = document.createElement("div");
         div.style.height = this.dropDivHeight;
-        div.style.width = this.dropDivWith;
+        div.style.minWidth = this.dropDivWith;
         div.classList.add("aie-dropdown-container");
 
         for (let i = 0; i < this.menuData.length; i++) {
